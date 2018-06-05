@@ -7,15 +7,17 @@
 //
 
 #import "ViewController.h"
-
+#import "LLNetworkManager.h"
 @interface ViewController ()
 
 @end
 
 @implementation ViewController
+static NSString *const dataUrl = @"https://www.baidu.com/login";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+
     // Do any additional setup after loading the view, typically from a nib.
 }
 
