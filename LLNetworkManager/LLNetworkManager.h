@@ -17,7 +17,10 @@ typedef NS_ENUM(NSUInteger, LLNetworkStatusType) {
     /// 手机网络
     LLNetworkStatusReachableViaWWAN,
     /// WIFI网络
-    LLNetworkStatusReachableViaWiFi
+    LLNetworkStatusReachableViaWiFi,
+    /// 抓包网络
+    LLNetworkStatusProxyStatus
+    
 };
 
 typedef NS_ENUM(NSUInteger, LLRequestSerializer) {
@@ -61,6 +64,9 @@ typedef void(^LLNetworkStatus)(LLNetworkStatusType status);
 
 /// WiFi网络:YES, 反之:NO
 + (BOOL)isWiFiNetwork;
+
+/// 抓包网络:YES, 反之:NO
++ (BOOL)getProxyStatus;
 
 /// 取消所有HTTP请求
 + (void)cancelAllRequest;

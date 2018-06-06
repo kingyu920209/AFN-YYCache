@@ -245,6 +245,8 @@ static NSMutableArray *_allSessionTask;
 }
 + (void)networkStatusWithBlock:(LLNetworkStatus)networkStatus {
     
+
+    
     [[AFNetworkReachabilityManager sharedManager] setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
         switch (status) {
             case AFNetworkReachabilityStatusUnknown:
@@ -265,6 +267,10 @@ static NSMutableArray *_allSessionTask;
                 break;
         }
     }];
+    if ([self getProxyStatus]) {
+        networkStatus ? networkStatus(LLNetworkStatusProxyStatus) : nil;
+        if (_isOpenLog) LLog(@"抓包网络");
+    }
     
 }
 
@@ -280,6 +286,17 @@ static NSMutableArray *_allSessionTask;
     return [AFNetworkReachabilityManager sharedManager].reachableViaWiFi;
 }
 
++ (BOOL)getProxyStatus {
+    NSDictionary * proxySettings = (__bridge NSDictionary*)(CFNetworkCopySystemProxySettings());
+    NSArray * proxies = (__bridge NSArray *)(CFNetworkCopyProxiesForURL((__bridge CFURLRef _Nonnull)([NSURL URLWithString:@"http://www.baidu.com"]), (__bridge CFDictionaryRef _Nonnull)(proxySettings)));
+    NSDictionary * settings = proxies[0];
+    if ([[settings objectForKey:(NSString *)kCFProxyTypeKey]isEqualToString:@"kCFProxyTypeNone"]) {
+        return NO;
+    }else{
+        return YES;
+    }
+    return NO;
+}
 + (void)openLog {
     _isOpenLog = YES;
 }
@@ -355,6 +372,8 @@ static NSMutableArray *_allSessionTask;
     
     [[self manager] setSecurityPolicy:securityPolicy];
 }
+
+
 @end
 #pragma mark - NSDictionary,NSArray的分类
 /*
